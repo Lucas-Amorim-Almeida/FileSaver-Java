@@ -23,10 +23,14 @@ public class Bin extends Directory{
   }
 
   @Deprecated
-  public void setParent(Node node) throws Exception {}
+  public void setParent(Node node) throws Exception {
+    throw new UnsupportedOperationException("Unimplemented method 'addChild'");
+  }
 
   @Deprecated
-  public void rename(Name name) {}
+  public void rename(Name name) {
+    throw new UnsupportedOperationException("Unimplemented method 'addChild'");
+  }
 
   @Override
   public void addChild(Node node) throws Exception {

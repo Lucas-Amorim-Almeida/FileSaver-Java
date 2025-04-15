@@ -4,6 +4,7 @@ import com.filesaver.domain.core.DTO.Username;
 import com.filesaver.sevrvices.JacksonAdapter;
 
 import java.io.File;
+import java.util.List;
 
 import com.filesaver.domain.core.ApplicationRoot;
 import com.filesaver.domain.core.Bin;
@@ -20,10 +21,11 @@ public class Main {
             initializer();
             System.out.println("------------\n\n");
             
-            Root root = new Root(setUser());
-            // Bin bin = new Bin(root);
-            
             // userDirTest();
+            Root root = new Root(setUser());
+            Bin bin = new Bin(root);
+            
+            testFile(root, bin);
             // testBin(bin, root);
             
             printChildren(root, 0);
@@ -42,6 +44,30 @@ public class Main {
 
         ApplicationRoot.createInstance(new Name("APP_ROOT"), JacksonInstance);
         
+    }
+
+    private static void testFile(Root root, Bin bin) throws Exception{
+        Directory img = new Directory(new Name("Images"), root);
+
+        com.filesaver.domain.core.File imgFile = new com.filesaver.domain.core.File(new Name("test.img"), img);
+        System.out.println(imgFile.getName().toString() + " - OK");
+        com.filesaver.domain.core.File imgFileToDelete = new com.filesaver.domain.core.File("test2","png", img);
+        System.out.println(imgFileToDelete.getName().toString() + " - OK");
+        com.filesaver.domain.core.File txtFile = new com.filesaver.domain.core.File(new Name("test.txt"), root);
+        System.out.println(txtFile.getName().toString() + " - OK");
+        com.filesaver.domain.core.File toDeleteFile = new com.filesaver.domain.core.File(new Name("test2.txt"), root);
+        System.out.println(toDeleteFile.getName().toString() + " - OK");
+
+        imgFile.rename(new Name("Renamed.png"));
+        System.out.println("Test .getName da sobrecarga do constructor: " + imgFileToDelete.getName().toString());
+
+        bin.addChild(toDeleteFile);
+
+        bin.addChild(imgFileToDelete);
+        bin.addChild(txtFile);
+        bin.restore(txtFile);
+
+        bin.clear();
     }
 
     private static User setUser(){
@@ -89,6 +115,9 @@ public class Main {
             dirDown.setParent(root);
             System.out.println("SetParent to Downloads: Downloads path: " + dirDown.getPath()+"\n\n");
 
+            Directory nDir = new Directory(new Name("Test"), root);
+
+            nDir.rename(new Name("Renamed"));
 
             printChildren(root,0);
 
@@ -102,14 +131,17 @@ public class Main {
         if(layer == 0){
             System.out.println("Children of: " + node.getPath());
         }
-        for(Node child: node.getChildren()){
-            System.out.print(" ");
-            for(int i = 1; i <= layer; i++){
-                System.out.print("-");
-            }
-            System.out.print("-> " + child.getName().toString() + "\n");
-            if(child.getChildren().size() > 0){
-                printChildren(child, layer + 1);
+        List<Node> currentChildren = node.getChildren();
+        if(currentChildren != null){
+            for(Node child: currentChildren){
+                System.out.print(" ");
+                for(int i = 1; i <= layer; i++){
+                    System.out.print("-");
+                }
+                System.out.print("-> " + child.getName().toString() + "\n");
+                if(child.getChildren() != null && child.getChildren().size() > 0){
+                    printChildren(child, layer + 1);
+                }
             }
         }
     }

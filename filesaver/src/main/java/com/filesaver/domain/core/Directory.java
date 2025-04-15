@@ -24,6 +24,13 @@ public class Directory extends Node {
 
   @Override
   public void rename(Name name){
+    //verifica se há outro Node com o mesmo Name no mesmo level da tree;
+    List<Node> childrenOfThisParent = parent.getChildren();
+    for (Node child : childrenOfThisParent){
+      if(name.equals(child.getName())){
+        return;
+      }
+    }
     super.name = name;
   }
 
