@@ -1,7 +1,7 @@
 package com.filesaver.domain.errors;
 
 public class DataMismatchError extends Exception {
-  DataMismatchError(String fieldName) {
+  public DataMismatchError(String fieldName) {
     super(msgBuilder(fieldName));
   }
 

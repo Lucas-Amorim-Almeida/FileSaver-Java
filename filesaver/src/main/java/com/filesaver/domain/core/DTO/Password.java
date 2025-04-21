@@ -37,12 +37,12 @@ public class Password {
     boolean comparation = false;
     if(this.isHash){
       comparation = password.getIsHash()? 
-        this.password == password.toString() : 
-        encrypter.compare(this.password, password.toString());
-    } else {
-      comparation = !password.getIsHash()? 
-        this.password == password.toString() : 
+        this.password.equals(password.toString()) : 
         encrypter.compare(password.toString(), this.password);
+      } else {
+        comparation = !password.getIsHash()? 
+        this.password.equals(password.toString()) : 
+        encrypter.compare(this.password, password.toString());
     }
     return comparation;
   }
